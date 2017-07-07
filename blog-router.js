@@ -28,6 +28,11 @@ BlogPosts.create(
   'Sloan',
   '1498794906754'
   );
+BlogPosts.create(
+  'This post should not have a date',
+  'I don\'t have a date either...',
+  'admin'
+  );
 
 
 // send back JSON representation of all blog posts
@@ -41,7 +46,7 @@ router.get('/', (req, res) => {
 // log error and return 400 status code with hepful message.
 // if okay, add new item, and return it with a status 201.
 router.post('/', jsonParser, (req, res) => {
-  // ensure `title', 'conten' and `author` are in request body
+  // ensure `title', 'content' and `author` are in request body
   const requiredFields = ['title', 'content', 'author'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -68,7 +73,7 @@ router.delete('/:id', (req, res) => {
 // of that, log error and send back status code 400. otherwise
 // call `BlogPosts.updateItem` with updated post.
 router.put('/:id', jsonParser, (req, res) => {
-  const requiredFields = ['title', 'content', 'author', 'publishDate', 'id'];
+  const requiredFields = ['title', 'content', 'author'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -92,7 +97,7 @@ router.put('/:id', jsonParser, (req, res) => {
     author: req.body.author,
     publishDate: req.body.publishDate
   });
-  res.status(204).json(updatedItem);
-})
+  res.status(200).json(updatedItem);
+});
 
 module.exports = router;
