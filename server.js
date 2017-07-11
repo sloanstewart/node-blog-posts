@@ -113,6 +113,19 @@ app.put('/posts/:id', jsonParser, (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
+app.delete('/posts/:id', (req, res) => {
+  Post
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(post => res.status(204).end())
+    .catch(err => res.status(500).json({message: 'Internal server error'}));
+});
+
+// catch-all endpoint if client makes request to non-existent endpoint
+app.use('*', function(req, res) {
+  res.status(404).json({message: 'Not Found'});
+});
+
 // runServer for testing
 let server;
 
