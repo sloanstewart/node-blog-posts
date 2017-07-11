@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // GET up to 10 blog posts
-app.get('/blog-posts', (req, res) => {
+app.get('/posts', (req, res) => {
   Post
     .find()
     .limit(10)
@@ -44,7 +44,7 @@ app.get('/blog-posts', (req, res) => {
 });
 
 // GET a post by ID
-app.get('/blog-posts/:id', (req, res) => {
+app.get('/posts/:id', (req, res) => {
   Post
     .findById(req.params.id)
     .exec()
@@ -56,7 +56,7 @@ app.get('/blog-posts/:id', (req, res) => {
 });
 
 // POST a blog post
-app.post('/blog-posts', jsonParser, (req, res) => {
+app.post('/posts', jsonParser, (req, res) => {
 
   const requiredFields = ['title', 'content', 'author'];
   for (let i=0; i<requiredFields.length; i++) {
