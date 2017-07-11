@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const faker = require('faker');
 
 const {app, runServer, closeServer} = require('../server');
 
@@ -35,12 +36,6 @@ describe('Blog', function() {
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.html;
-        // res.body.should.be.a('array');
-        // res.body.length.should.be.at.least(1);
-        // res.body.forEach(function(item) {
-        //   item.should.be.a('object');
-        //   item.should.have.all.keys(
-        //     'id', 'firstName', 'lastName', 'birthYear');
       });
   });
   it('should list BlogPosts JSON on GET', function() {
@@ -49,7 +44,7 @@ describe('Blog', function() {
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
-        res.body.should.be.a('array');
+        res.body.should.be.a('object');
         res.body.length.should.be.at.least(1);
         const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
         res.body.forEach(function(item) {
@@ -59,7 +54,7 @@ describe('Blog', function() {
       });
   });
   it('should create a new BlogPosts JSON on POST', function() {
-    const newPost = { "title": "chai test post",
+    const newPost = { "title": "test post",
                       "content": "just another test post",
                       "author":{
                       	"firstName": "chai",
