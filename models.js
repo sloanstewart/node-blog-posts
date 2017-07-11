@@ -1,4 +1,3 @@
-// const uuid = require('uuid');
 const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema({
@@ -14,9 +13,6 @@ const postSchema = mongoose.Schema({
 postSchema.virtual('authorString').get(function() {
   return `${this.author.firstName} ${this.author.lastName}`.trim()});
 
-// this is an *instance method* which will be available on all instances
-// of the model. This method will be used to return an object that only
-// exposes *some* of the fields we want from the underlying data
 postSchema.methods.apiRepr = function() {
   return {
     id: this._id,

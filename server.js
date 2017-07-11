@@ -1,4 +1,5 @@
-
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -15,12 +16,15 @@ const app = express();
 // log the http layer
 app.use(morgan('common'));
 
+// static files
 app.use(express.static('public'));
 
+// GET index html
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+// GET up to 10 blog posts
 app.get('/blog-posts', (req, res) => {
   Post
     .find()
@@ -39,6 +43,7 @@ app.get('/blog-posts', (req, res) => {
     });
 });
 
+// GET a post by ID
 app.get('/blog-posts/:id', (req, res) => {
   Post
     .findById(req.params.id)
@@ -47,6 +52,33 @@ app.get('/blog-posts/:id', (req, res) => {
     .catch(err => {
       console.error(err);
         res.status(500).json({message: 'Internal server error'})
+    });
+});
+
+// POST a blog post
+app.post('/blog-posts', jsonParser, (req, res) => {
+
+  const requiredFields = ['title', 'content', 'author'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Post
+    .create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author
+    })
+    .then(
+      post => res.status(201).json(post.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
     });
 });
 
