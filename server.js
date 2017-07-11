@@ -28,7 +28,8 @@ app.get('/blog-posts', (req, res) => {
     .exec()
     .then(posts => {
       res.json({
-        posts
+        posts: posts.map(
+          (post) => post.apiRepr())
       });
     })
     .catch(
@@ -42,7 +43,7 @@ app.get('/blog-posts/:id', (req, res) => {
   Post
     .findById(req.params.id)
     .exec()
-    .then(post =>res.json(post))
+    .then(post =>res.json(post.apiRepr()))
     .catch(err => {
       console.error(err);
         res.status(500).json({message: 'Internal server error'})
