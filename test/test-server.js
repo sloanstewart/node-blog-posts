@@ -45,7 +45,7 @@ describe('Blog', function() {
   });
   it('should list BlogPosts JSON on GET', function() {
     return chai.request(app)
-      .get('/blog-posts')
+      .get('/posts')
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
@@ -61,10 +61,12 @@ describe('Blog', function() {
   it('should create a new BlogPosts JSON on POST', function() {
     const newPost = { "title": "chai test post",
                       "content": "just another test post",
-                      "author": "chaibrochill"
+                      "author":{
+                      	"firstName": "chai",
+                      	"lastName":"brochill"}
                     };
     return chai.request(app)
-      .post('/blog-posts')
+      .post('/posts')
       // .set('content-type', 'application/json')
       .send(newPost)
       .then(function(res) {
@@ -83,11 +85,11 @@ describe('Blog', function() {
     };
     return chai.request(app)
       // first have to get so we have an idea of object to update
-      .get('/blog-posts')
+      .get('/posts')
       .then(function(res) {
         updateData.id = res.body[0].id;
         return chai.request(app)
-          .put(`/blog-posts/${updateData.id}`)
+          .put(`/posts/${updateData.id}`)
           .send(updateData)
       })
       .then(function(res) {
@@ -101,10 +103,10 @@ describe('Blog', function() {
     return chai.request(app)
       // first have to get so we have an `id` of item
       // to delete
-      .get('/blog-posts')
+      .get('/posts')
       .then(function(res) {
         return chai.request(app)
-          .delete(`/blog-posts/${res.body[0].id}`);
+          .delete(`/posts/${res.body[0].id}`);
       })
       .then(function(res) {
         res.should.have.status(204);
